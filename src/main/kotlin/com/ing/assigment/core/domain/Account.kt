@@ -11,17 +11,4 @@ data class Account(
     var closureDate: LocalDateTime?,
     val initialDeposit: Double,
     val holder: Person,
-) {
-
-    init {
-        require(!(isTemporary && closureDate == null)) {
-            "Closure date is mandatory for temporary accounts"
-        }
-        require(!(isTemporary && closureDate != null && closureDate!!.isBefore(openingDate.plusMonths(2)))) {
-            "Closure date cannot be earlier than the opening date + 2 months"
-        }
-        require(initialDeposit >= 0) {
-            "Initial deposit cannot be negative"
-        }
-    }
-}
+)

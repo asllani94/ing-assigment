@@ -2,14 +2,11 @@ package com.ing.assigment.endpoints.rest.v1
 
 import com.ing.assigment.core.command.CreateAccountCommand
 import com.ing.assigment.core.command.UpdateAccountCommand
-import com.ing.assigment.core.command.UpsertPersonCommand
 import com.ing.assigment.core.domain.Account
 import com.ing.assigment.core.domain.Person
 import com.ing.assigment.core.service.IAccountService
-import com.ing.assigment.dto.account.AccountDto
-import com.ing.assigment.dto.account.CreateAccountDto
-import com.ing.assigment.dto.account.UpdateAccountDto
-import com.ing.assigment.dto.person.PersonDto
+import com.ing.assigment.dto.AccountDto
+import com.ing.assigment.dto.PersonDto
 import com.ing.assigment.errorhandling.NotFoundException
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
@@ -29,9 +26,9 @@ import java.util.*
 class AccountController(private val accountService: IAccountService) {
 
     @PostMapping
-    fun createAccount(@Valid @RequestBody createAccountDto: CreateAccountDto): ResponseEntity<AccountDto> =
+    fun createAccount(@Valid @RequestBody createAccountCommand: CreateAccountCommand): ResponseEntity<AccountDto> =
         accountService
-            .createAccount(createAccountDto.toCommand())
+            .createAccount(createAccountCommand)
             .toDto()
             .let { ResponseEntity.status(HttpStatus.CREATED).body(it) }
 
@@ -44,10 +41,10 @@ class AccountController(private val accountService: IAccountService) {
     @PutMapping("/{accountUuid}")
     fun updateAccount(
         @PathVariable accountUuid: UUID,
-        @Valid @RequestBody updateAccountDto: UpdateAccountDto,
+        @Valid @RequestBody updateAccountCommand: UpdateAccountCommand,
     ): ResponseEntity<AccountDto> =
         accountService
-            .updateAccount(accountUuid, updateAccountDto.toCommand())
+            .updateAccount(accountUuid, updateAccountCommand)
             .toDto().let {
                 ResponseEntity.ok(it)
             }
@@ -57,35 +54,6 @@ class AccountController(private val accountService: IAccountService) {
         accountService.deleteAccount(accountUuid).let {
             ResponseEntity.noContent().build()
         }
-}
-
-private fun CreateAccountDto.toCommand(): CreateAccountCommand {
-    return CreateAccountCommand(
-        openingDate = openingDate,
-        type = type,
-        isTemporary = isTemporary,
-        closureDate = closureDate,
-        initialDeposit = initialDeposit,
-        holder = holder.toCommand(),
-    )
-}
-
-private fun UpdateAccountDto.toCommand(): UpdateAccountCommand {
-    return UpdateAccountCommand(
-        isTemporary = isTemporary,
-        closureDate = closureDate,
-        initialDeposit = initialDeposit,
-        holder = holder?.toCommand(),
-    )
-}
-
-private fun PersonDto.toCommand(): UpsertPersonCommand {
-    return UpsertPersonCommand(
-        firstName = firstName,
-        lastName = lastName,
-        dateOfBirth = dateOfBirth,
-        email = email,
-    )
 }
 
 private fun Account.toDto(): AccountDto {

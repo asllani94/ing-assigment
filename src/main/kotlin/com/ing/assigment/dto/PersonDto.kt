@@ -1,8 +1,8 @@
-package com.ing.assigment.core.domain
+package com.ing.assigment.dto
 
 import java.time.LocalDate
 
-data class Person(
+data class PersonDto(
     val firstName: String,
     val lastName: String,
     val dateOfBirth: LocalDate,

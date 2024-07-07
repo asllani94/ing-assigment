@@ -1,9 +1,8 @@
-package com.ing.assigment.dto.account
+package com.ing.assigment.dto
 
 import com.ing.assigment.core.domain.AccountType
-import com.ing.assigment.dto.person.PersonDto
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 data class AccountDto(
     val id: UUID,

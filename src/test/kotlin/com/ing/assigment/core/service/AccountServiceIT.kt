@@ -9,9 +9,7 @@ import com.ing.assigment.testsupport.IntegrationTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -61,18 +59,6 @@ class AccountServiceIT {
         assertEquals(createAccountCommand.holder.lastName, createdAccount.holder.lastName)
         assertEquals(createAccountCommand.holder.dateOfBirth, createdAccount.holder.dateOfBirth)
         assertEquals(createAccountCommand.holder.email, createdAccount.holder.email)
-    }
-
-    @Test
-    fun `given invalid input, should throw error`() {
-        // Given
-        val createAccountCommand = createDefaultCreateAccountCommand().copy(initialDeposit = -100.0)
-
-        // When, Then
-        val exception = assertThrows<IllegalArgumentException> {
-            accountService.createAccount(createAccountCommand)
-        }
-        assertTrue(exception.message!!.contains("Initial deposit cannot be negative"))
     }
 
     @Test

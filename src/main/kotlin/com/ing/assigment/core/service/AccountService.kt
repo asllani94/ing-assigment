@@ -7,6 +7,7 @@ import com.ing.assigment.core.domain.Account
 import com.ing.assigment.core.domain.Person
 import com.ing.assigment.core.port.AccountPort
 import com.ing.assigment.errorhandling.NotFoundException
+import jakarta.validation.Valid
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.UUID
@@ -17,7 +18,7 @@ class AccountService(
 ) : IAccountService {
 
     @Transactional
-    override fun createAccount(createAccountCommand: CreateAccountCommand): Account {
+    override fun createAccount(@Valid createAccountCommand: CreateAccountCommand): Account {
         val account = createAccountCommand.toDomain()
 
         return accountPort.createAccount(account)
@@ -28,7 +29,7 @@ class AccountService(
         accountPort.findAccount(accountUuid)
 
     @Transactional
-    override fun updateAccount(accountUuid: UUID, updateCommand: UpdateAccountCommand): Account =
+    override fun updateAccount(accountUuid: UUID, @Valid updateCommand: UpdateAccountCommand): Account =
         accountPort.findAccount(accountUuid)?.let { currentAccount ->
 
             val accountToUpdate = currentAccount
